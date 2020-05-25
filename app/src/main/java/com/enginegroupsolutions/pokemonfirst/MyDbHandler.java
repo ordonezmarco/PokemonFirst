@@ -44,7 +44,7 @@ public class MyDbHandler extends SQLiteOpenHelper {
         db.insert(TABLE_POKEMONS, null, values);
         db.close();
     }
-    public void deletePokemon (Pokemon pokemonName){
+    public void deletePokemon (String pokemonName){
         String deleteQuery = "DELETE FROM " + TABLE_POKEMONS + " WHERE " + COLUMNA_NOMBRE + "=\"" + pokemonName + "\";";
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(deleteQuery);
