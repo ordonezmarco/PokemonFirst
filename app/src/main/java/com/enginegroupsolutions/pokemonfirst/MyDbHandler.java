@@ -1,6 +1,8 @@
 package com.enginegroupsolutions.pokemonfirst;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -34,9 +36,37 @@ public class MyDbHandler extends SQLiteOpenHelper {
     }
 
     public void addPokemon (Pokemon pokemon){
+        ContentValues values = new ContentValues();
 
-    }
-    public void deletePokemon (Pokemon pokemon){
+        values.put(COLUMNA_NOMBRE,pokemon.get_pName());
+        SQLiteDatabase db = getWritableDatabase();
 
+        db.insert(TABLE_POKEMONS, null, values);
+        db.close();
     }
+    public void deletePokemon (Pokemon pokemonName){
+        String deleteQuery = "DELETE FROM " + TABLE_POKEMONS + " WHERE " + COLUMNA_NOMBRE + "=\"" + pokemonName + "\";";
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(deleteQuery);
+    }
+
+    public String databaseToString(){
+        String dbString = "";
+        SQLiteDatabase db = getWritableDatabase();
+
+        String querySelect = "SELECT * FROM " + TABLE_POKEMONS + " WHERE 1;";
+        Cursor c = db.rawQuery(querySelect, null);
+        c.moveToFirst();
+
+        while(!c.isAfterLast()){
+            if(c.getString(c.getColumnIndex("_pName")) != null) {
+                dbString += c.getString(c.getColumnIndex("_pName"));
+                dbString += "\n";
+            }
+            c.moveToNext();
+        }
+        db.close();
+        return dbString;
+    }
+
 }
